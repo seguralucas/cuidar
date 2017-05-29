@@ -1,4 +1,4 @@
-package so.cuidar;
+package so.cuidar.manejadores;
 
 import android.app.Activity;
 import android.app.Service;
@@ -12,6 +12,12 @@ import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import so.cuidar.R;
 
 /**
  * Created by GAS on 23/05/2017.
@@ -38,14 +44,17 @@ public class GpsService extends Service implements LocationListener {
     double longitude; // longitude
 
     // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1;
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
 
     // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 *  1;
+    private static final long MIN_TIME_BW_UPDATES = 1000 *  0;
 
     @Override
     public void onLocationChanged(Location newLocation) {
         this.location=newLocation;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        ((TextView)this.activity.findViewById(R.id.textGpsActualizado)).setText("GPS Actualizados a las: "+dateFormat.format(date));
     }
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -106,6 +115,7 @@ public class GpsService extends Service implements LocationListener {
                         if (locationManager != null) {
                             location = locationManager
                                     .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
                             if (location != null) {
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();

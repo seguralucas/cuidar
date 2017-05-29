@@ -30,4 +30,6 @@ public class Chat {
     public void setMensajes(ArrayList<MensajeChat> mensajes) {
         this.mensajes = mensajes;
     }
+
+
 }

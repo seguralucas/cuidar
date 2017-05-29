@@ -1,4 +1,4 @@
-package so.cuidar;
+package so.cuidar.manejadores;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,6 +11,9 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import so.cuidar.Notificacion;
+import so.cuidar.R;
 
 /**
  * Created by GAS on 16/05/2017.

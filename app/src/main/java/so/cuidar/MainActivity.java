@@ -24,12 +24,15 @@ import so.cuidar.entidades.Chat;
 import so.cuidar.entidades.Comunidad;
 import so.cuidar.entidades.NotificacionAlarmaPanico;
 import so.cuidar.entidades.User;
+import so.cuidar.manejadores.Session;
 
 public class MainActivity extends AppCompatActivity {
-
+    Session session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        session= new Session(getApplicationContext());
+        System.out.println("Usuario: "+session.getusename());
         setContentView(R.layout.activity_main);
         System.out.println("Token: "+ FirebaseInstanceId.getInstance().getToken());
 
@@ -64,8 +67,9 @@ public class MainActivity extends AppCompatActivity {
                                 Map<String, Object> userMap = new ObjectMapper().convertValue(comunidad, Map.class);
                                 comunidadMapa.put(comunidad.getNombre(), userMap);
                                 ref.updateChildren(comunidadMapa);
-                                System.out.println("Abriendo notificaciones... ");
                             }
+                        System.out.println("Abriendo notificaciones... ");
+                        session.setusename(User.nombre);
                         Intent intent = new Intent(thisAtributo, Notificacion.class);
                         startActivity(intent);
                     }

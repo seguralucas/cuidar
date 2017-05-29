@@ -1,5 +1,6 @@
 package so.cuidar;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -23,29 +24,29 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import so.cuidar.entidades.MensajeChat;
 import so.cuidar.entidades.User;
+import so.cuidar.manejadores.GpsService;
+import so.cuidar.manejadores.Session;
 
 
 public class Notificacion extends AppCompatActivity {
 
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
     DatabaseReference refUltimaNotificacion = ref.child(User.comunidad).child("notificacionAlarmaPanico").child("cadena");
-    DatabaseReference refChat = ref.child(User.comunidad).child("chat");
     TextView notificacion;
-    TextView textChatMensaje;
-    TextView lblChatConversacion;
     GpsService gps;
-
+    Session session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        gps= new GpsService((LocationManager) getSystemService(LOCATION_SERVICE),this);
+        location = gps.getLocation();
         setContentView(R.layout.activity_notificacion);
         this.notificacion=(TextView) findViewById(R.id.lblUltimaNotificacion);
-        this.textChatMensaje =(TextView) findViewById(R.id.textChat);
-        this.lblChatConversacion=(TextView) findViewById(R.id.lblChat);
+        session=new Session(getApplicationContext());
+        System.out.println("Usuario not: "+session.getusename());
+
         FirebaseMessaging.getInstance().subscribeToTopic(User.comunidad);
-        gps= new GpsService((LocationManager) getSystemService(LOCATION_SERVICE),this);
     }
 
     @Override
@@ -68,42 +69,15 @@ public class Notificacion extends AppCompatActivity {
             }
         });
 
-        refChat.addValueEventListener(new ValueEventListener() {
 
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                StringBuilder sb= new StringBuilder();
-                sb.append("<html><body>");
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    //No se porqué no funciona así
-                    /*MensajeChat mensajeChat=dataSnapshot.getValue(MensajeChat.class);
-                    System.out.println("Key: "+child.getKey() +"Emisor: "+mensajeChat.getEmisor()+" mensaje: "+ mensajeChat.getMensaje());*/
-                    MensajeChat mensajeChat= new MensajeChat(child.child("emisor").getValue(String.class),child.child("mensaje").getValue(String.class));
-                    sb.append("<b>"+mensajeChat.getEmisor()+"</b>: "+ mensajeChat.getMensaje()+"<br/>");
-                }
-                sb.append("</body></html>");
-                lblChatConversacion.setText(Html.fromHtml(sb.toString()));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
-
-
-    public void enviarChat(View view) {
-        DatabaseReference postChat = refChat.push();
-        MensajeChat mensajeChat= new MensajeChat(User.nombre,this.textChatMensaje.getText().toString());
-        this.textChatMensaje.setText("");
-        postChat.setValue(mensajeChat);
+    public void mostrarChat(View view){
+        Intent intent = new Intent(this, Chatctivity.class);
+        startActivity(intent);
     }
-
     private Location location;
 
     public void botonDePanico(View view){
-        LocationManager locationManager;
         LocationListener listener;
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");

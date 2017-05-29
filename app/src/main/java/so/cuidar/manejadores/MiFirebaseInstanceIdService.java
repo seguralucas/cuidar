@@ -1,4 +1,4 @@
-package so.cuidar;
+package so.cuidar.manejadores;
 
 import android.util.Log;
 

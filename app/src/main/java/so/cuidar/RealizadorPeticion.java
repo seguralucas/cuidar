@@ -16,6 +16,7 @@ import cz.msebera.android.httpclient.params.BasicHttpParams;
 import cz.msebera.android.httpclient.params.HttpConnectionParams;
 import cz.msebera.android.httpclient.params.HttpParams;
 import so.cuidar.entidades.User;
+import so.cuidar.manejadores.Session;
 
 /**
  * Created by GAS on 17/05/2017.
@@ -26,8 +27,9 @@ public class RealizadorPeticion extends AsyncTask<String, Void, HttpResponse> {
     @Override
     protected HttpResponse doInBackground(String... params) {
         String comunidad= params[0];
+        String usuario= params[1];
         int TIMEOUT_MILLISEC = 10000;  // = 10 seconds
-        String postMessage="{   \"to\": \"/topics/"+ comunidad +"\",   \"notification\": {      \"title\": \"Botón de pánico activado\",      \"body\": \"El usuario:"+ User.apellido+", "+User.nombre+" ha presionado el boton de panico.\"   },   \"data\": {      \"titulo\": \"Este es el titular\",      \"descripcion\": \"Aquí estará todo el contenido de la noticia\"   } }"; //HERE_YOUR_POST_STRING.
+        String postMessage="{   \"to\": \"/topics/"+ comunidad +"\",   \"notification\": {      \"title\": \"Botón de pánico activado\",      \"body\": \"El usuario:"+ usuario +" ha presionado el boton de panico.\"   },   \"data\": {      \"titulo\": \"Este es el titular\",      \"descripcion\": \"Aquí estará todo el contenido de la noticia\"   } }"; //HERE_YOUR_POST_STRING.
         HttpParams httpParams = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParams, TIMEOUT_MILLISEC);
         HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_MILLISEC);
@@ -56,6 +58,8 @@ public class RealizadorPeticion extends AsyncTask<String, Void, HttpResponse> {
         catch(Exception e){
             e.printStackTrace();
         }
+
+        
         return null;
     }
 }

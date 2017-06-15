@@ -7,12 +7,11 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import so.cuidar.Notificacion;
+import so.cuidar.NotificacionActivity;
 import so.cuidar.R;
 
 /**
@@ -33,7 +32,7 @@ public class MiFirebaseMessagingService extends FirebaseMessagingService{
 
     private void mostrarNotificacion(String title, String body,RemoteMessage remoteMessage) {
 
-        Intent intent = new Intent(this, Notificacion.class);
+        Intent intent = new Intent(this, NotificacionActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("NotificationMessage", remoteMessage);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
